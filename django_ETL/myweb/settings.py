@@ -10,20 +10,53 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+# 1. os, environ, pymysql import 진행
+import os
+import pymysql
+import environ
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# 2. 각 호출자가 기본 매개변수를 전달할 필요가 없도록 환경 변수의 체계 기반 조회를 제공합니다
+# 즉, 환경변수를 불러올 수 있는 상태로 변화한 것(connection 객체라고 생각해주시면 됩니다.)
+env = environ.Env(DEBUG=(bool, True))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+# 3. 환경변수가 들어있는 파일을 읽어옵니다.
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-snl1_vtv$&!c4p2@m#!0idkpk+%0nz(+!)9ovm2ih2v*7(5a!+'
+pymysql.install_as_MySQLdb()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# 4. 환경변수를 불러옵니다.
+SECRET_KEY = env('SECRET_KEY')
+ALGORITHM = env('ALGORITHM')
+DEBUG = env('DEBUG')
+
+DATABASES = {
+    'default' : {
+        'ENGINE'  : 'django.db.backends.mysql',
+        'NAME'    : env('DB_NAME'),
+        'USER'    : env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST'    : env('DB_HOST'),
+        'PORT'    : env('DB_PORT'),
+        'OPTIONS' : {'charset': 'utf8mb4'}
+    }
+}
+
+
+# # Quick-start development settings - unsuitable for production
+# # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = 'django-insecure-snl1_vtv$&!c4p2@m#!0idkpk+%0nz(+!)9ovm2ih2v*7(5a!+'
+
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
