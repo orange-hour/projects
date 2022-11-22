@@ -48,12 +48,14 @@ DATABASES = {
     }
 }
 
+#새로운 User 모델을 정의함에 따라 settings.py에 AUTH_USER_MODEL=’app이름.User’ 설정 값을 추가해야함
+AUTH_USER_MODEL='user.User'
+
 
 # # Quick-start development settings - unsuitable for production
 # # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-snl1_vtv$&!c4p2@m#!0idkpk+%0nz(+!)9ovm2ih2v*7(5a!+'
 
 # # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -70,9 +72,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'rest_framework', 
+    'corsheaders',
+    'knox',
+] 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # 순서 중요
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,7 +86,52 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+] 
+
+# CORS Settings
+# 모든 접근을 허락함 - 제한하고 싶다면 'CORS_ALLOWED_ORIGINS=['168.127.0.1']'과 같이 작성
+CORS_ORIGIN_ALLOW_ALL = True
+# 쿠키 정보를 같이 받을건지에 대한 Boolean
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS를 통해 요청받을 수 있는 http 메소드
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+# 요청을 받을 때 헤더에 담길 수 있는 정보 명시
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+
+# DRF setting - 예시입니다.
+REST_FRAMEWORK = {
+
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "knox.auth.TokenAuthentication",
+    ),
+
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ]
+}
+
 
 ROOT_URLCONF = 'myweb.urls'
 
@@ -105,13 +156,6 @@ WSGI_APPLICATION = 'myweb.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -138,7 +182,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
