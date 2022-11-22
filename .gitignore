@@ -1,2 +1,3 @@
-.env
 django_ETL/.env
+.DS_Store
+django_ETL/.DS_Store
