@@ -1,10 +1,10 @@
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+from . import views
 
-from django.urls import path, include
-from user import views
-
-urlpatterns = [
-    path('', views.index),
-    path('create/', views.create),
-    path('read/<id>/', views.read) #바뀔 수 있는 값 지정
+urlpatterns =[
+    path('blog/', views.BlogList.as_view()),
+    path('blog/<int:pk>/', views.BlogDetail.as_view()),
 ]
- 
+
+urlpatterns = format_suffix_patterns(urlpatterns)
