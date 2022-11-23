@@ -5,9 +5,6 @@ from .models import Blog
 from .serializers import BlogSerializer
 from rest_framework import generics
 
-# def index(request):
-#     return HttpResponse("Hello, world!")
-
 class RegisterView(CreateAPIView):
     """ 회원가입 뷰 - 사용자를 생성합니다. """
 

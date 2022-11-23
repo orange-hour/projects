@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import User
-# from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 #import 모듈 추가
@@ -14,7 +13,8 @@ from rest_framework import serializers
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = '__all__' #model의 title과 body를 모두 직렬화(serialize) 할 수 있음
+        fields = '__all__' 
+        #model의 title과 body를 모두 직렬화(serialize) 할 수 있음
 
 # 회원가입
 class CreateUserSerializer(serializers.ModelSerializer):
