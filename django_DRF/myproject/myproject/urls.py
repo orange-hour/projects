@@ -20,4 +20,5 @@ from board import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('board.urls')),
+    path('user/', include('account.urls'))
 ]
